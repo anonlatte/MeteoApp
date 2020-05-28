@@ -3,7 +3,9 @@
     package="com.example.meteoapp">
 
     <application
+        android:name=".MeteoApp"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
