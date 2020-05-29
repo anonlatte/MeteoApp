@@ -9,10 +9,10 @@ import org.jetbrains.annotations.TestOnly
 interface WeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun createWeather(weather: Weather): Long
+    suspend fun createWeather(weather: Weather): Long
 
     @Query("SELECT * FROM weather WHERE city_id = :cityId")
-    fun getWeatherByCity(cityId: Int): LiveData<Weather>
+    fun getWeatherByCity(cityId: Long): LiveData<Weather>
 
     @Query("SELECT * FROM weather")
     fun getAllWeatherRows(): LiveData<List<Weather>>
@@ -21,7 +21,7 @@ interface WeatherDao {
     fun updateWeather(weather: Weather): Int
 
     @Delete
-    fun deleteWeather(weather: Weather)
+    suspend fun deleteWeather(weather: Weather): Int
 
     @TestOnly
     @Insert(onConflict = OnConflictStrategy.REPLACE)

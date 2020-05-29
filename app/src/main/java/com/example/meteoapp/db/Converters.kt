@@ -19,55 +19,46 @@ class Converters {
 
 
     @TypeConverter
-    fun weatherMapToString(weatherMap: MutableMap<Month, Double>) = weatherMap.toString()
+    fun weatherMapToString(weatherMap: MutableMap<Month, Double>): String {
+        val convertedWeatherMap = mutableMapOf<Int, Double>()
+        for (weather in weatherMap) {
+            convertedWeatherMap[weather.key.getValue()] = weather.value.round(2)
+        }
+        return convertedWeatherMap.toString()
+    }
 
     @TypeConverter
     fun stringToWeatherMap(value: String): MutableMap<Month, Double> {
-        val valuesAndKeysList = value.subSequence(1, value.lastIndex - 1).split(",")
+        val valuesAndKeysList = value.subSequence(1, value.lastIndex - 1).replace("\\s".toRegex(), "").split(",")
         val weatherMap = mutableMapOf<Month, Double>()
         valuesAndKeysList.forEach {
             val monthAndWeather = it.split("=")
-            val test = Month.DECEMBER
-            weatherMap[intToMonth(stringMonthToInt(monthAndWeather[0]))] =
-                monthAndWeather[1].toDouble()
+            weatherMap[intToMonth(monthAndWeather[0].toInt())] =
+                    monthAndWeather[1].toDouble()
         }
         return weatherMap
     }
 
     @TypeConverter
-    fun monthToInt(month: Month) = month.monthNumber
+    fun monthToInt(month: Month) = month.getValue()
 
     @TypeConverter
     fun intToMonth(value: Int) = when (value) {
-        0 -> Month.JANUARY
-        1 -> Month.FEBRUARY
-        2 -> Month.MARCH
-        3 -> Month.APRIL
-        4 -> Month.MAY
-        5 -> Month.JUNE
-        6 -> Month.JULY
-        7 -> Month.AUGUST
-        8 -> Month.SEPTEMBER
-        9 -> Month.OCTOBER
-        10 -> Month.NOVEMBER
-        11 -> Month.DECEMBER
+        1 -> Month.JANUARY
+        2 -> Month.FEBRUARY
+        3 -> Month.MARCH
+        4 -> Month.APRIL
+        5 -> Month.MAY
+        6 -> Month.JUNE
+        7 -> Month.JULY
+        8 -> Month.AUGUST
+        9 -> Month.SEPTEMBER
+        10 -> Month.OCTOBER
+        11 -> Month.NOVEMBER
+        12 -> Month.DECEMBER
         else -> Month.UNKNOWN
     }
 
-    private fun stringMonthToInt(value: String) =
-        when (value) {
-            "JANUARY" -> 0
-            "FEBRUARY" -> 1
-            "MARCH" -> 2
-            "APRIL" -> 3
-            "MAY" -> 4
-            "JUNE" -> 5
-            "JULY" -> 6
-            "AUGUST" -> 7
-            "SEPTEMBER" -> 8
-            "OCTOBER" -> 9
-            "NOVEMBER" -> 10
-            "DECEMBER" -> 11
-            else -> -1
-        }
 }
+
+private fun Double.round(decimals: Int): Double = (this * 100).toInt() / 100.0
