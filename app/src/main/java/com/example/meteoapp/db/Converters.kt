@@ -3,6 +3,8 @@ package com.example.meteoapp.db
 import androidx.room.TypeConverter
 import com.example.meteoapp.db.model.CityType
 import com.example.meteoapp.db.model.Month
+import kotlin.math.abs
+import kotlin.math.round
 
 class Converters {
 
@@ -29,12 +31,13 @@ class Converters {
 
     @TypeConverter
     fun stringToWeatherMap(value: String): MutableMap<Month, Double> {
-        val valuesAndKeysList = value.subSequence(1, value.lastIndex - 1).replace("\\s".toRegex(), "").split(",")
+        val valuesAndKeysList =
+            value.subSequence(1, value.lastIndex - 1).replace("\\s".toRegex(), "").split(",")
         val weatherMap = mutableMapOf<Month, Double>()
         valuesAndKeysList.forEach {
             val monthAndWeather = it.split("=")
             weatherMap[intToMonth(monthAndWeather[0].toInt())] =
-                    monthAndWeather[1].toDouble()
+                monthAndWeather[1].toDouble()
         }
         return weatherMap
     }
@@ -61,4 +64,21 @@ class Converters {
 
 }
 
-private fun Double.round(decimals: Int): Double = (this * 100).toInt() / 100.0
+/**
+ * Rounds the double number to the given value of [decimals] by module or rounds towards the closest integer with ties rounded towards even integer.
+ *
+ * Special cases:
+ *   - `round(x)` is `x` where `x` is `NaN` or `+Inf` or `-Inf` or already a mathematical integer.
+ */
+private fun Double.round(decimals: Int = 0): Double {
+    val absDecimals = abs(decimals)
+    return if (absDecimals > 0) {
+        var multiplier: Double = 10.0
+        for (i in 1 until absDecimals) {
+            multiplier *= 10
+        }
+        (this * multiplier).toInt() / multiplier
+    } else {
+        round(this)
+    }
+}
