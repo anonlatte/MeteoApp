@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="city_types">
+        <item>@string/city_type_small</item>
+        <item>@string/city_type_medium</item>
+        <item>@string/city_type_big</item>
+    </string-array>
+</resources>
