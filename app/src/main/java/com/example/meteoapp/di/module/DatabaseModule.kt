@@ -21,5 +21,13 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun providesCityDao(database: AppDatabase?) = database?.cityDao()
+    fun providesCityDao(database: AppDatabase) = database.cityDao()
+
+    @Singleton
+    @Provides
+    fun providesFavoriteCityDao(database: AppDatabase) = database.favoriteCityDao()
+
+    @Singleton
+    @Provides
+    fun providesWeatherDao(database: AppDatabase) = database.weatherDao()
 }
