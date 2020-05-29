@@ -2,6 +2,7 @@ package com.example.meteoapp.data
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.paging.toLiveData
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -49,13 +50,13 @@ class CityDaoTest {
     fun testGetCities() = runBlocking {
         val city = City(7, "Рязань", CityType.SMALL)
         cityDao.createCity(city)
-        assertThat(getValue(cityDao.getCities()).size, equalTo(7))
+        assertThat(getValue(cityDao.getCities().toLiveData(50)).size, equalTo(7))
     }
 
     @Test
     fun testGetCityByName() = runBlocking {
-        val city = cityDao.getCityByName(testCity.name)
-        assertThat(getValue(city).id.toLong(), equalTo(testCityId))
+        val city = cityDao.getCityByName(testCity.name).toLiveData(1)
+        assertThat(getValue(city)[0]!!.id.toLong(), equalTo(testCityId))
     }
 
     @Test
