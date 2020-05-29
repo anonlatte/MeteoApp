@@ -4,12 +4,14 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.meteoapp.db.dao.CityDao
+import com.example.meteoapp.db.dao.FavoriteCityDao
 import com.example.meteoapp.db.dao.WeatherDao
 import com.example.meteoapp.db.model.City
+import com.example.meteoapp.db.model.FavoriteCity
 import com.example.meteoapp.db.model.Weather
 
 @Database(
-    entities = [City::class, Weather::class],
+    entities = [City::class, FavoriteCity::class, Weather::class],
     version = AppDatabase.VERSION,
     exportSchema = false
 )
@@ -21,5 +23,6 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun cityDao(): CityDao
+    abstract fun favoriteCityDao(): FavoriteCityDao
     abstract fun weatherDao(): WeatherDao
 }

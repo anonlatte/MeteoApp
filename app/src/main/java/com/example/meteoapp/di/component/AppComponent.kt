@@ -11,7 +11,10 @@ import dagger.android.AndroidInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AndroidInjectionModule::class, AppModule::class, MainActivityModule::class, DatabaseModule::class])
+@Component(
+    modules = [AndroidInjectionModule::class, AppModule::class, MainActivityModule::class,
+        DatabaseModule::class]
+)
 interface AppComponent {
 
     fun inject(meteoApp: MeteoApp)
