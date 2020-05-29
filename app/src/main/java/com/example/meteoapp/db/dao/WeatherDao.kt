@@ -1,6 +1,6 @@
 package com.example.meteoapp.db.dao
 
-import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import com.example.meteoapp.db.model.Weather
 import org.jetbrains.annotations.TestOnly
@@ -12,10 +12,10 @@ interface WeatherDao {
     suspend fun createWeather(weather: Weather): Long
 
     @Query("SELECT * FROM weather WHERE city_id = :cityId")
-    fun getWeatherByCity(cityId: Long): LiveData<Weather>
+    fun getWeatherByCity(cityId: Long): DataSource.Factory<Int, Weather>
 
     @Query("SELECT * FROM weather")
-    fun getAllWeatherRows(): LiveData<List<Weather>>
+    fun getAllWeatherRows(): DataSource.Factory<Int, Weather>
 
     @Update
     fun updateWeather(weather: Weather): Int

@@ -2,6 +2,7 @@ package com.example.meteoapp.data
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.paging.toLiveData
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -64,13 +65,19 @@ class WeatherDaoTest {
         )
         )
         weatherDao.createWeather(weather)
-        MatcherAssert.assertThat(getValue(weatherDao.getAllWeatherRows()).size, Matchers.equalTo(7))
+        MatcherAssert.assertThat(
+            getValue(weatherDao.getAllWeatherRows().toLiveData(50)).size,
+            Matchers.equalTo(7)
+        )
     }
 
     @Test
     fun testGetWeatherByCity() = runBlocking {
-        val weather = weatherDao.getWeatherByCity(testWeatherId)
-        MatcherAssert.assertThat(getValue(weather).cityId.toLong(), Matchers.equalTo(testWeatherId))
+        val weather = weatherDao.getWeatherByCity(testWeatherId).toLiveData(1)
+        MatcherAssert.assertThat(
+            getValue(weather)[0]!!.cityId.toLong(),
+            Matchers.equalTo(testWeatherId)
+        )
     }
 
     @Test
