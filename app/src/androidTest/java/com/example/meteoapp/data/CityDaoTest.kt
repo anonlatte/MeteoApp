@@ -49,9 +49,6 @@ class CityDaoTest {
     fun testGetCities() = runBlocking {
         val city = City(7, "Рязань", CityType.SMALL)
         cityDao.createCity(city)
-        getValue(cityDao.getCities()).forEach {
-            print(it.toString())
-        }
         assertThat(getValue(cityDao.getCities()).size, equalTo(7))
     }
 
