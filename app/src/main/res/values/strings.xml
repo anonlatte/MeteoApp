@@ -10,8 +10,20 @@
     <string name="city_type_medium">Medium</string>
     <string name="city_type_big">Big</string>
     <string name="city_type_unknown">Unknown</string>
+
     <string name="menu_settings">Settings</string>
+
     <string name="title_settings">Settings</string>
     <string name="title_dialog_add_city">Add city</string>
+
     <string name="action_add">Add</string>
+    <string name="action_add_to_favorites">Add to favorites</string>
+
+    <string name="warning_empty_city_field">Field must be filled</string>
+    <string name="warning_empty_city_type_field">Select type</string>
+    <string name="warning_invalid_field">Invalid field</string>
+    <string name="warning_unexpected_error">Whoops, something went wrong</string>
+
+    <string name="title_temperature_unit">Temperature unit</string>
+    <string name="temperature">Temperature</string>
 </resources>

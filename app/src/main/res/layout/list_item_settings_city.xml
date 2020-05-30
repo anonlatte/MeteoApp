@@ -14,7 +14,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.meteoapp.ui.home.HomeViewModel" />
+            type="com.example.meteoapp.ui.settings.SettingsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meteoapp.databinding.FragmentHomeBinding
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -17,6 +18,7 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var viewModel: HomeViewModel
+    private val adapter = CitiesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,9 +26,10 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val adapter = CitiesAdapter()
+
         binding.citiesList.adapter = adapter
-        subscribeUI(adapter, binding)
+        binding.citiesList.layoutManager = LinearLayoutManager(requireContext())
+        subscribeUI()
         return binding.root
     }
 
@@ -35,7 +38,7 @@ class HomeFragment : Fragment() {
         super.onAttach(context)
     }
 
-    private fun subscribeUI(adapter: CitiesAdapter, binding: FragmentHomeBinding) {
+    private fun subscribeUI() {
         viewModel.cities.observe(viewLifecycleOwner, Observer { result ->
             binding.hasCities = !result.isNullOrEmpty()
             adapter.submitList(result)

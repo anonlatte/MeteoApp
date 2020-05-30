@@ -56,7 +56,7 @@ class CityDaoTest {
     @Test
     fun testGetCityByName() = runBlocking {
         val city = cityDao.getCityByName(testCity.name).toLiveData(1)
-        assertThat(getValue(city)[0]!!.id.toLong(), equalTo(testCityId))
+        assertThat(getValue(city)[0]!!.id, equalTo(testCityId))
     }
 
     @Test

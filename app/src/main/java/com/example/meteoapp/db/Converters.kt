@@ -73,7 +73,7 @@ class Converters {
 private fun Double.round(decimals: Int = 0): Double {
     val absDecimals = abs(decimals)
     return if (absDecimals > 0) {
-        var multiplier: Double = 10.0
+        var multiplier = 10.0
         for (i in 1 until absDecimals) {
             multiplier *= 10
         }
