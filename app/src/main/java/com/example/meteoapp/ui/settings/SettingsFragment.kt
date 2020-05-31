@@ -42,7 +42,8 @@ class SettingsFragment : Fragment() {
         /**
          * Regular expression for valid city name characters. Does not include any characters except EN and RU alphabet.
          */
-        private const val PATTERN_CITY_NAME = "^[A-Z][a-z]+|^[А-Я][а-я]+"
+        private const val PATTERN_CITY_NAME =
+            "^[A-Z][a-z]+(?:[\\s-][a-zA-Z]+)*$|^[А-Я][а-я]+(?:[\\s-][а-яА-Я]+)*$"
     }
 
     override fun onAttach(context: Context) {
