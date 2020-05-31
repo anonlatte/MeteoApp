@@ -2,8 +2,10 @@ package com.example.meteoapp.ui.settings
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,10 +27,13 @@ import javax.inject.Inject
 
 class SettingsFragment : Fragment() {
 
+    private var temperatureUnit: Int = 0
     private lateinit var binding: FragmentSettingsBinding
 
     @Inject
     lateinit var viewModel: SettingsViewModel
+    private lateinit var adapter: SettingsCitiesAdapter
+    private lateinit var sharedPreferences: SharedPreferences
 
     companion object {
         /**
@@ -53,9 +58,11 @@ class SettingsFragment : Fragment() {
             getString(CityType.MEDIUM.typeToResource()),
             getString(CityType.BIG.typeToResource())
         )
-        val adapter = SettingsCitiesAdapter()
-        binding.settingsCitiesList.adapter = adapter
-        binding.settingsCitiesList.layoutManager = LinearLayoutManager(requireContext())
+
+        initializeSettings()
+        initializeTemperatureSettings()
+        initializeAdapter()
+        subscribeUI()
 
         binding.addCityButton.setOnClickListener {
             val dialogBinding: DialogCityAddingBinding = DataBindingUtil.inflate(
@@ -67,9 +74,56 @@ class SettingsFragment : Fragment() {
             showCityAddingDialog(dialogBinding)
         }
 
-        subscribeUI(adapter, binding)
-
         return binding.root
+    }
+
+    private fun initializeTemperatureSettings() {
+        when (temperatureUnit) {
+            0 -> {
+                binding.temperatureUnits.check(R.id.celsiusButton)
+            }
+            1 -> {
+                binding.temperatureUnits.check(R.id.fahrenheitButton)
+            }
+            else -> {
+                binding.temperatureUnits.check(R.id.kelvinButton)
+            }
+        }
+
+        binding.temperatureUnits.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked) {
+                when (group.checkedButtonId) {
+                    R.id.celsiusButton -> changeTemperatureUnitsSettings(0)
+                    R.id.fahrenheitButton -> changeTemperatureUnitsSettings(1)
+                    R.id.kelvinButton -> changeTemperatureUnitsSettings(2)
+                    else -> changeTemperatureUnitsSettings(0)
+                }
+            }
+        }
+
+    }
+
+    private fun initializeSettings() {
+        sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return
+        val defaultValue = resources.getInteger(R.integer.saved_temperature_units_default_key)
+        temperatureUnit =
+            sharedPreferences.getInt(getString(R.string.saved_temperature_unit), defaultValue)
+        Log.d("Settings", "temperature unit is $temperatureUnit.")
+    }
+
+    private fun changeTemperatureUnitsSettings(value: Int) {
+        sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPreferences.edit()) {
+            putInt(getString(R.string.saved_temperature_unit), value)
+            commit()
+        }
+        Log.d("Settings", "temperature units changed to $value.")
+    }
+
+    private fun initializeAdapter() {
+        adapter = SettingsCitiesAdapter()
+        binding.settingsCitiesList.adapter = adapter
+        binding.settingsCitiesList.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun showCityAddingDialog(dialogBinding: DialogCityAddingBinding) {
@@ -125,7 +179,7 @@ class SettingsFragment : Fragment() {
     }
 
 
-    private fun subscribeUI(adapter: SettingsCitiesAdapter, binding: FragmentSettingsBinding) {
+    private fun subscribeUI() {
         viewModel.cities.observe(viewLifecycleOwner, Observer { result ->
             binding.hasCities = !result.isNullOrEmpty()
             adapter.submitList(result)

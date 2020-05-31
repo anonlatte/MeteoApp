@@ -26,4 +26,8 @@
 
     <string name="title_temperature_unit">Temperature unit</string>
     <string name="temperature">Temperature</string>
+    <string name="units_temperature_celsius">°C</string>
+    <string name="units_temperature_fahrenheit">°F</string>
+    <string name="units_temperature_kelvin">K</string>
+    <string name="saved_temperature_unit">saved_temperature_unit</string>
 </resources>
