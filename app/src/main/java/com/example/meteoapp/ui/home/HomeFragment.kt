@@ -18,7 +18,7 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var viewModel: HomeViewModel
-    private val adapter = CitiesAdapter()
+    private lateinit var adapter: CitiesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,10 +27,15 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        binding.citiesList.adapter = adapter
-        binding.citiesList.layoutManager = LinearLayoutManager(requireContext())
+        initializeAdapter()
         subscribeUI()
         return binding.root
+    }
+
+    private fun initializeAdapter() {
+        adapter = CitiesAdapter(viewModel)
+        binding.citiesList.adapter = adapter
+        binding.citiesList.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onAttach(context: Context) {

@@ -1,6 +1,5 @@
 package com.example.meteoapp.ui.home
 
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.paging.PagedListAdapter
@@ -8,20 +7,32 @@ import androidx.recyclerview.widget.DiffUtil
 import com.example.meteoapp.R
 import com.example.meteoapp.db.model.City
 
-class CitiesAdapter : PagedListAdapter<City, CityViewHolder>(diffCallback) {
+class CitiesAdapter(private var viewModel: HomeViewModel) :
+    PagedListAdapter<City, CityViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CityViewHolder(parent)
 
     override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
         val addToFavoriteButton: CheckBox = holder.itemView.findViewById(R.id.addToFavoriteButton)
-        addToFavoriteButton.setButtonDrawable(R.drawable.sl_favourite_24dp)
+        val item = getItem(position)
 
-        addToFavoriteButton.setOnClickListener {
-            Log.v("Click", "Add to favourite")
+        addToFavoriteButton.setButtonDrawable(R.drawable.sl_favourite_24dp)
+        // TODO change to async checking
+        val isCityFavorite = viewModel.isCityFavorite(item?.id!!)
+        if (isCityFavorite) {
+            addToFavoriteButton.isChecked = isCityFavorite
+            addToFavoriteButton.setOnClickListener {
+                if (!addToFavoriteButton.isChecked) {
+                    viewModel.removeCityFromFavorite(item.id)
+                } else {
+                    viewModel.addCityToFavorite(item.id)
+                }
+            }
         }
 
-        holder.bindTo(getItem(position))
+        holder.bindTo(item)
     }
+
 
     companion object {
 

@@ -1,7 +1,10 @@
 package com.example.meteoapp.db.dao
 
 import androidx.paging.DataSource
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.meteoapp.db.model.FavoriteCity
 import org.jetbrains.annotations.TestOnly
 
@@ -15,10 +18,10 @@ interface FavoriteCityDao {
     fun getFavoriteCities(): DataSource.Factory<Int, FavoriteCity>
 
     @Query("SELECT * FROM favorite_city WHERE city_id = :cityId")
-    fun getFavoriteCityById(cityId: Long): DataSource.Factory<Int, FavoriteCity>
+    suspend fun getFavoriteCityById(cityId: Long): FavoriteCity?
 
-    @Delete
-    suspend fun removeFromFavorites(favoriteCity: FavoriteCity): Int
+    @Query("DELETE FROM favorite_city WHERE city_id=:cityId")
+    suspend fun removeFromFavorites(cityId: Long): Int
 
     @TestOnly
     @Insert(onConflict = OnConflictStrategy.REPLACE)

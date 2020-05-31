@@ -15,7 +15,7 @@ import androidx.room.*
 )
 data class FavoriteCity(
     @PrimaryKey(autoGenerate = true)
-    var id: Long,
+    var id: Long = 0,
     @ColumnInfo(name = "city_id")
     var cityId: Long
 )

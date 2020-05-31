@@ -26,9 +26,9 @@ class Repository @Inject constructor(
         favoriteCityDao.addToFavorites(favoriteCity)
 
     fun getFavoriteCities() = favoriteCityDao.getFavoriteCities()
-    fun getFavoriteCityById(cityId: Long) = favoriteCityDao.getFavoriteCityById(cityId)
-    suspend fun removeFromFavorites(favoriteCity: FavoriteCity) =
-        favoriteCityDao.removeFromFavorites(favoriteCity)
+    suspend fun getFavoriteCityById(cityId: Long) = favoriteCityDao.getFavoriteCityById(cityId)
+    suspend fun removeFromFavorites(cityId: Long) =
+        favoriteCityDao.removeFromFavorites(cityId)
 
     suspend fun insertAllFavoriteCities(favoriteCity: List<FavoriteCity>) =
         favoriteCityDao.insertAll(favoriteCity)
