@@ -17,9 +17,9 @@ data class Weather(
     @ColumnInfo(name = "weather_id")
     val weatherId: Long = 0,
     @ColumnInfo(name = "city_id")
-    val cityId: Int,
+    val cityId: Long,
 
     @ColumnInfo(name = "weather_map")
-    var weatherMap: MutableMap<Month, Double>
+    var weatherMap: MutableMap<Month, Double?>
 )
 

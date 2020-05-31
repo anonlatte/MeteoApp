@@ -13,9 +13,12 @@ class MonthViewHolder(private var parent: ViewGroup) : RecyclerView.ViewHolder(
     private val monthName = itemView.findViewById<TextView>(R.id.monthName)
     private val monthTemperature = itemView.findViewById<TextView>(R.id.monthTemperature)
     var month: Month? = null
-    fun bindTo(month: Month?) {
-        this.month = month
+    var temperature: Double? = null
+    fun bindTo(monthWeather: Month?) {
+        this.month = monthWeather
+        this.temperature = monthWeather?.temperature
         monthName.text = month?.toString()
+        monthTemperature.text = temperature?.toString()
 
         // TODO set temperature by settings of the temperature scales
     }

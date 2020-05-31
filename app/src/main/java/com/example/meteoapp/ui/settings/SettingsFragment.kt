@@ -29,6 +29,7 @@ import javax.inject.Inject
 
 class SettingsFragment : Fragment() {
 
+    private lateinit var monthsListAdapter: MonthsAdapter
     private var temperatureUnit: Int = 0
     private lateinit var binding: FragmentSettingsBinding
 
@@ -119,6 +120,7 @@ class SettingsFragment : Fragment() {
             putInt(getString(R.string.saved_temperature_unit), value)
             commit()
         }
+        temperatureUnit = value
         Log.d("Settings", "temperature units changed to $value.")
     }
 
@@ -162,17 +164,29 @@ class SettingsFragment : Fragment() {
                     errorText.text = getString(R.string.warning_empty_city_type_field)
                 }
                 else -> {
-                    val response = (viewModel.addCity(
+                    val response = viewModel.addCity(
                         cityNameEditText.text.toString(),
                         cityTypeSpinner.selectedItem.toString()
-                    ))
+                    )
+                    if (response != null) {
+                        val preparedWeatherMap = mutableMapOf<Month, Double?>()
+                        monthsListAdapter.months.forEach { month ->
+                            if (month.temperature != null) {
+                                preparedWeatherMap[month] = month.temperature
+                            }
+                        }
+                        //TODO convert to default temperature units
+                        viewModel.addWeatherToCity(response, preparedWeatherMap, temperatureUnit)
+                    }
 
-                    val snackbarText =
-                        if (response) "${cityNameEditText.text} - has been added!" else getString(R.string.warning_unexpected_error)
+                    val toastText =
+                        if (response != null) "${cityNameEditText.text} - has been added!" else getString(
+                            R.string.warning_unexpected_error
+                        )
 
                     Toast.makeText(
                         requireContext(),
-                        snackbarText,
+                        toastText,
                         Toast.LENGTH_LONG
                     ).show()
 
@@ -185,12 +199,21 @@ class SettingsFragment : Fragment() {
     private fun initializeMonthsAdapter(dialogBinding: DialogCityAddingBinding) {
 
         val monthsArray = arrayOf(
-            Month.JANUARY, Month.FEBRUARY, Month.MARCH, Month.APRIL,
-            Month.MAY, Month.JUNE, Month.JULY, Month.AUGUST,
-            Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER, Month.DECEMBER
+            Month.JANUARY,
+            Month.FEBRUARY,
+            Month.MARCH,
+            Month.APRIL,
+            Month.MAY,
+            Month.JUNE,
+            Month.JULY,
+            Month.AUGUST,
+            Month.SEPTEMBER,
+            Month.OCTOBER,
+            Month.NOVEMBER,
+            Month.DECEMBER
         )
 
-        val monthsListAdapter = MonthsAdapter(monthsArray)
+        monthsListAdapter = MonthsAdapter(monthsArray, temperatureUnit)
         dialogBinding.monthsList.adapter = monthsListAdapter
         dialogBinding.monthsList.layoutManager = GridLayoutManager(requireContext(), 3)
     }

@@ -28,7 +28,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/base_margin"
                 android:layout_weight="1"
-                android:hint="Name" />
+                android:hint="@string/hint_city_name" />
 
             <Spinner
                 android:id="@+id/type"

@@ -70,7 +70,7 @@ class Converters {
  * Special cases:
  *   - `round(x)` is `x` where `x` is `NaN` or `+Inf` or `-Inf` or already a mathematical integer.
  */
-private fun Double.round(decimals: Int = 0): Double {
+fun Double.round(decimals: Int = 0): Double {
     val absDecimals = abs(decimals)
     return if (absDecimals > 0) {
         var multiplier = 10.0

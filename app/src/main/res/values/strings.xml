@@ -30,4 +30,5 @@
     <string name="units_temperature_fahrenheit">°F</string>
     <string name="units_temperature_kelvin">K</string>
     <string name="saved_temperature_unit">saved_temperature_unit</string>
+    <string name="hint_city_name">City name</string>
 </resources>

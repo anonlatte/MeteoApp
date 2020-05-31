@@ -12,7 +12,7 @@ interface WeatherDao {
     suspend fun createWeather(weather: Weather): Long
 
     @Query("SELECT * FROM weather WHERE city_id = :cityId")
-    fun getWeatherByCity(cityId: Long): DataSource.Factory<Int, Weather>
+    suspend fun getWeatherByCity(cityId: Long): Weather
 
     @Query("SELECT * FROM weather")
     fun getAllWeatherRows(): DataSource.Factory<Int, Weather>

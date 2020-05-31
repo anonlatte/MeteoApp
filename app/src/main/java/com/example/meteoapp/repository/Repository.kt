@@ -34,7 +34,7 @@ class Repository @Inject constructor(
         favoriteCityDao.insertAll(favoriteCity)
 
     suspend fun createWeather(weather: Weather) = weatherDao.createWeather(weather)
-    fun getWeatherByCity(cityId: Long) = weatherDao.getWeatherByCity(cityId)
+    suspend fun getWeatherByCity(cityId: Long) = weatherDao.getWeatherByCity(cityId)
     fun getAllWeatherRows() = weatherDao.getAllWeatherRows()
     suspend fun updateWeather(weather: Weather) = weatherDao.deleteWeather(weather)
     fun deleteWeather(weather: Weather) = weatherDao.updateWeather(weather)
