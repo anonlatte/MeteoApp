@@ -15,11 +15,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meteoapp.R
 import com.example.meteoapp.databinding.DialogCityAddingBinding
 import com.example.meteoapp.databinding.FragmentSettingsBinding
 import com.example.meteoapp.db.model.CityType
+import com.example.meteoapp.db.model.Month
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -137,6 +139,8 @@ class SettingsFragment : Fragment() {
                     dialogInterface.cancel()
                 }.create()
 
+        initializeMonthsAdapter(dialogBinding)
+
         dialog.setView(dialogBinding.root)
         dialog.show()
         val cityNameEditText = dialogBinding.name
@@ -176,6 +180,19 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun initializeMonthsAdapter(dialogBinding: DialogCityAddingBinding) {
+
+        val monthsArray = arrayOf(
+            Month.JANUARY, Month.FEBRUARY, Month.MARCH, Month.APRIL,
+            Month.MAY, Month.JUNE, Month.JULY, Month.AUGUST,
+            Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER, Month.DECEMBER
+        )
+
+        val monthsListAdapter = MonthsAdapter(monthsArray)
+        dialogBinding.monthsList.adapter = monthsListAdapter
+        dialogBinding.monthsList.layoutManager = GridLayoutManager(requireContext(), 3)
     }
 
 

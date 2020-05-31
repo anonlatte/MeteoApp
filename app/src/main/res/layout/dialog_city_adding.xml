@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,24 +13,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/base_margin"
-            android:layout_weight="1"
-            android:hint="Name" />
+            android:layout_marginBottom="@dimen/base_margin"
+            android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/type"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/base_margin"
+                android:layout_weight="1"
+                android:hint="Name" />
+
+            <Spinner
+                android:id="@+id/type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/base_margin"
+                android:layout_weight="1"
+                android:entries="@array/city_types" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/monthsList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/base_margin"
-            android:layout_weight="1"
-            android:entries="@array/city_types" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:overScrollMode="never"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/list_item_month" />
+
     </LinearLayout>
 </layout>
