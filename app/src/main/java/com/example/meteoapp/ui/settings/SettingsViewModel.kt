@@ -56,7 +56,7 @@ class SettingsViewModel @Inject constructor(private val repository: Repository) 
             for (key in weatherMap) {
                 if (key.value != null) {
                     key.setValue(
-                        temperatureStrategy.getTemperature(key.value!!)
+                        temperatureStrategy.toCelsius(key.value!!)
                     )
                 }
             }

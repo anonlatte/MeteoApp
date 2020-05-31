@@ -61,7 +61,7 @@ class MonthsAdapter(var months: Array<Month>, var temperatureUnit: Int) :
                 }
             }
 
-            convertedTemperature = temperatureStrategy.getTemperature(value)
+            convertedTemperature = temperatureStrategy.toCelsius(value)
 
             convertedTemperature >= temperatureStrategy.minTemperature &&
                     convertedTemperature <= temperatureStrategy.maxTemperature
