@@ -11,14 +11,18 @@ import com.example.meteoapp.db.model.temperature.CelsiusStrategy
 import com.example.meteoapp.db.model.temperature.FahrenheitStrategy
 import com.example.meteoapp.db.model.temperature.KelvinStrategy
 import com.example.meteoapp.db.model.temperature.Temperature
+import com.example.meteoapp.db.round
 
-class MonthsAdapter(var months: Array<Month>, var temperatureUnit: Int) :
+class MonthsAdapter(var months: Array<Month>, private var temperatureUnit: Int) :
     RecyclerView.Adapter<MonthViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MonthViewHolder(parent)
 
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int) {
+        val item = months[position]
+        val itemTemperature = item.temperature
+
         val monthTemperatureEditText = holder.itemView.findViewById<EditText>(R.id.monthTemperature)
         monthTemperatureEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -35,14 +39,23 @@ class MonthsAdapter(var months: Array<Month>, var temperatureUnit: Int) :
                             monthTemperatureEditText.context.getString(R.string.warning_invalid_field)
                     } else {
                         monthTemperatureEditText.error = null
-                        months[position].temperature = enteredNumber
+                        item.temperature = enteredNumber
                     }
                 }
             }
 
         })
 
-        holder.bindTo(months[position])
+        val temperature = when (temperatureUnit) {
+            1 -> Temperature(FahrenheitStrategy())
+            2 -> Temperature(KelvinStrategy())
+            else -> Temperature(CelsiusStrategy())
+        }
+        if (itemTemperature != null) {
+            item.temperature = temperature.fromCelsius(itemTemperature).round(2)
+        }
+
+        holder.bindTo(item)
     }
 
     fun isEnteredTemperatureValid(value: Double?): Boolean {
