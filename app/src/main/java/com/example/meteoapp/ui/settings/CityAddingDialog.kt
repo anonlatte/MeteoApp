@@ -64,7 +64,7 @@ class CityAddingDialog(
         setTitle(R.string.title_dialog_add_city)
         setCancelable(true)
 
-        // Empty listener for overriding in show()
+        // Empty listener for overriding
         setPositiveButton(
             context.getString(R.string.action_add)
         ) { _, _ -> }
@@ -124,10 +124,12 @@ class CityAddingDialog(
         return super.create()
     }
 
-    override fun show(): AlertDialog {
-        val alertDialog = super.show()
+    override fun setPositiveButton(
+        text: CharSequence?,
+        listener: DialogInterface.OnClickListener?
+    ): MaterialAlertDialogBuilder {
 
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+        val positiveButtonClickListener = DialogInterface.OnClickListener { dialog, which ->
             when {
                 cityNameEditText.text.isNullOrEmpty() ->
                     cityNameEditText.error = context.getString(R.string.warning_empty_city_field)
@@ -142,29 +144,43 @@ class CityAddingDialog(
                     errorText.text = context.getString(R.string.warning_empty_city_type_field)
                 }
                 else -> {
-                    val response = viewModel.addCity(
-                        cityNameEditText.text.toString(),
-                        cityTypeSpinner.selectedItem.toString()
-                    )
-                    if (response != null) {
-                        val preparedWeatherMap = mutableMapOf<Month, Double?>()
-                        monthsListAdapter.months.forEach { month ->
-                            if (month.temperature != null) {
-                                preparedWeatherMap[month] = month.temperature
-                            }
-                        }
+                    var cityResponse: Long? = null
 
-                        viewModel.addWeatherToCity(
-                            response,
-                            preparedWeatherMap,
-                            viewModel.temperatureUnit
+                    var toastText = ""
+
+                    // If only weather data adding
+                    if (city == null) {
+                        cityResponse = viewModel.addCity(
+                            cityNameEditText.text.toString(),
+                            cityTypeSpinner.selectedItem.toString()
                         )
                     }
 
-                    val toastText =
-                        if (response != null) "${cityNameEditText.text} - has been added!" else context.getString(
+                    // collect filled values from adapter's array
+                    val preparedWeatherMap = mutableMapOf<Month, Double?>()
+                    monthsListAdapter.months.forEach { month ->
+                        if (month.temperature != null) {
+                            preparedWeatherMap[month] = month.temperature
+                        }
+                    }
+
+                    // use retrieved id from response or from city instance
+                    val weatherResponse = viewModel.addWeatherToCity(
+                        city?.id ?: cityResponse!!,
+                        preparedWeatherMap,
+                        viewModel.temperatureUnit
+                    )
+
+                    // If we already have city instance just add weather
+                    toastText = if (city != null) {
+                        if (weatherResponse) "Weather has been updated!" else context.getString(
                             R.string.warning_unexpected_error
                         )
+                    } else {
+                        if (cityResponse != null) "${cityNameEditText.text} - has been added!" else context.getString(
+                            R.string.warning_unexpected_error
+                        )
+                    }
 
                     Toast.makeText(
                         context,
@@ -172,13 +188,11 @@ class CityAddingDialog(
                         Toast.LENGTH_LONG
                     ).show()
 
-                    alertDialog.cancel()
+                    dialog.cancel()
                 }
             }
+
         }
-
-
-        return alertDialog
+        return super.setPositiveButton(text, positiveButtonClickListener)
     }
-
 }
