@@ -3,4 +3,9 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryVariant">#3700B3</color>
     <color name="colorSecondary">#03DAC5</color>
+
+    <color name="summerButtonColor">#FFEA00</color>
+    <color name="winterButtonColor">#00E5FF</color>
+    <color name="springButtonColor">#76FF03</color>
+    <color name="autumnButtonColor">#FF9100</color>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -27,6 +28,80 @@
             android:scrollbars="vertical"
             android:visibility="@{hasCities ? View.VISIBLE: View.GONE}"
             tools:listitem="@layout/list_item_city" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fabMenu"
+            android:layout_width="@dimen/fab_menu_size"
+            android:layout_height="@dimen/fab_menu_size"
+            android:layout_gravity="end|bottom">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/autumnButton"
+                android:layout_width="@dimen/fab_sub_menu_size"
+                android:layout_height="@dimen/fab_sub_menu_size"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_outline_leaf_24"
+                app:backgroundTint="@color/autumnButtonColor"
+                app:fabCustomSize="@dimen/fab_sub_menu_size"
+                app:layout_constraintBottom_toBottomOf="@id/seasonChangeButton"
+                app:layout_constraintEnd_toEndOf="@id/seasonChangeButton"
+                app:layout_constraintStart_toStartOf="@id/seasonChangeButton"
+                app:layout_constraintTop_toTopOf="@id/seasonChangeButton" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/summerButton"
+                android:layout_width="@dimen/fab_sub_menu_size"
+                android:layout_height="@dimen/fab_sub_menu_size"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_outline_sun_24"
+                app:backgroundTint="@color/summerButtonColor"
+                app:fabCustomSize="@dimen/fab_sub_menu_size"
+                app:layout_constraintBottom_toBottomOf="@id/seasonChangeButton"
+                app:layout_constraintEnd_toEndOf="@id/seasonChangeButton"
+                app:layout_constraintStart_toStartOf="@id/seasonChangeButton"
+                app:layout_constraintTop_toTopOf="@id/seasonChangeButton" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/springButton"
+                android:layout_width="@dimen/fab_sub_menu_size"
+                android:layout_height="@dimen/fab_sub_menu_size"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_outline_flower_24"
+                app:backgroundTint="@color/springButtonColor"
+                app:fabCustomSize="@dimen/fab_sub_menu_size"
+                app:layout_constraintBottom_toBottomOf="@id/seasonChangeButton"
+                app:layout_constraintEnd_toEndOf="@id/seasonChangeButton"
+                app:layout_constraintStart_toStartOf="@id/seasonChangeButton"
+                app:layout_constraintTop_toTopOf="@id/seasonChangeButton" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/winterButton"
+                android:layout_width="@dimen/fab_sub_menu_size"
+                android:layout_height="@dimen/fab_sub_menu_size"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_outline_snowflake_24"
+                app:backgroundTint="@color/winterButtonColor"
+                app:fabCustomSize="@dimen/fab_sub_menu_size"
+                app:layout_constraintBottom_toBottomOf="@id/seasonChangeButton"
+                app:layout_constraintEnd_toEndOf="@id/seasonChangeButton"
+                app:layout_constraintStart_toStartOf="@id/seasonChangeButton"
+                app:layout_constraintTop_toTopOf="@id/seasonChangeButton" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/seasonChangeButton"
+                android:layout_width="@dimen/fab_main_button_size"
+                android:layout_height="@dimen/fab_main_button_size"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_outline_calendar_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.84"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.84" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
