@@ -36,16 +36,8 @@ class CityAddingDialog(
          */
         private const val PATTERN_CITY_NAME =
             "^[A-Z][a-z]+(?:[\\s-][a-zA-Z]+)*$|^[А-Я][а-я]+(?:[\\s-][а-яА-Я]+)*$"
-    }
 
-    override fun setOnDismissListener(onDismissListener: DialogInterface.OnDismissListener?): MaterialAlertDialogBuilder {
-        setView(null)
-        return super.setOnDismissListener(onDismissListener)
-    }
-
-    override fun create(): AlertDialog {
-
-        val monthsArray = arrayOf(
+        private val baseMonthsArray = arrayOf(
             Month.JANUARY,
             Month.FEBRUARY,
             Month.MARCH,
@@ -59,17 +51,20 @@ class CityAddingDialog(
             Month.NOVEMBER,
             Month.DECEMBER
         )
+    }
 
+    override fun create(): AlertDialog {
         cityNameEditText = dialogBinding.name
         cityTypeSpinner = dialogBinding.type
 
-        monthsListAdapter = MonthsAdapter(monthsArray, viewModel.temperatureUnit)
+        monthsListAdapter = MonthsAdapter(baseMonthsArray, viewModel.temperatureUnit)
         dialogBinding.monthsList.adapter = monthsListAdapter
         dialogBinding.monthsList.layoutManager = GridLayoutManager(context, 3)
 
         setTitle(R.string.title_dialog_add_city)
         setCancelable(true)
 
+        // Empty listener for overriding in show()
         setPositiveButton(
             context.getString(R.string.action_add)
         ) { _, _ -> }
@@ -106,6 +101,23 @@ class CityAddingDialog(
             cityNameEditText.setText(city!!.name)
             cityTypeSpinner.setSelection(city!!.type.type + 1)
         }
+
+        if (weather != null) {
+            val retrievedWeather = weather!!.weatherMap
+            val retrievedWeatherKeys = weather!!.weatherMap.keys
+            baseMonthsArray.forEach {
+                if (retrievedWeatherKeys.contains(it)) {
+                    it.temperature = retrievedWeather[it]
+                } else {
+                    it.temperature = null
+                }
+            }
+        } else {
+            baseMonthsArray.forEach {
+                it.temperature = null
+            }
+        }
+        monthsListAdapter.notifyDataSetChanged()
 
         setView(dialogBinding.root)
 
