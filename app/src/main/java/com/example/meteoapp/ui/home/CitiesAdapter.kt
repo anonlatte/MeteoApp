@@ -21,14 +21,15 @@ class CitiesAdapter(private var viewModel: HomeViewModel) :
         val isCityFavorite = viewModel.isCityFavorite(item?.id!!)
         if (isCityFavorite) {
             addToFavoriteButton.isChecked = isCityFavorite
-            addToFavoriteButton.setOnClickListener {
-                if (!addToFavoriteButton.isChecked) {
-                    viewModel.removeCityFromFavorite(item.id)
-                } else {
-                    viewModel.addCityToFavorite(item.id)
-                }
+        }
+        addToFavoriteButton.setOnClickListener {
+            if (!addToFavoriteButton.isChecked) {
+                viewModel.removeCityFromFavorite(item.id)
+            } else {
+                viewModel.addCityToFavorite(item.id)
             }
         }
+
 
         holder.bindTo(item)
     }
