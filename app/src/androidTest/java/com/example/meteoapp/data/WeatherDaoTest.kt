@@ -75,7 +75,7 @@ class WeatherDaoTest {
     fun testGetWeatherByCity() = runBlocking {
         val weather = weatherDao.getWeatherByCity(testWeatherId)
         MatcherAssert.assertThat(
-            weather.cityId.toLong(),
+            weather.cityId,
             Matchers.equalTo(testWeatherId)
         )
     }

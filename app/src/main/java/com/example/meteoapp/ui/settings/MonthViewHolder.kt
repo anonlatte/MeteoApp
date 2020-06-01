@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.meteoapp.R
 import com.example.meteoapp.db.model.Month
 
-class MonthViewHolder(private var parent: ViewGroup) : RecyclerView.ViewHolder(
+class MonthViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.list_item_month, parent, false)
 ) {
     private val monthName = itemView.findViewById<TextView>(R.id.monthName)

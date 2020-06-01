@@ -40,14 +40,14 @@ class SettingsCitiesAdapter(
                         viewModel,
                         retrievedWeather,
                         item
-                    ).create().show()
+                    ).show()
                 } else {
                     CityAddingDialog(
                         cityAddingBinding.root.context,
                         dialogBinding,
                         viewModel,
                         city = item
-                    ).create().show()
+                    ).show()
                 }
             }
 

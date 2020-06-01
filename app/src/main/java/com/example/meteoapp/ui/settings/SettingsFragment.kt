@@ -66,7 +66,7 @@ class SettingsFragment : Fragment() {
                 false
             )
 
-            CityAddingDialog(requireContext(), dialogBinding, viewModel).create().show()
+            CityAddingDialog(requireContext(), dialogBinding, viewModel).show()
         }
 
         return binding.root

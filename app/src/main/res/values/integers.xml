@@ -2,6 +2,4 @@
 <resources>
     <!-- Default unit - Celsius -->
     <integer name="saved_temperature_units_default_key">0</integer>
-    <integer name="saved_temperature_units_fahrenheit_key">1</integer>
-    <integer name="saved_temperature_units_kelvin_key">2</integer>
 </resources>
