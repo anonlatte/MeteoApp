@@ -20,6 +20,7 @@ import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
+    var temperatureUnit: Int = 0
     val cities = repository.getCities().toLiveData(50)
     val weather = repository.getAllWeatherRows().toLiveData(50)
     lateinit var cityTypes: List<String>
@@ -52,6 +53,7 @@ class SettingsViewModel @Inject constructor(private val repository: Repository) 
             else -> Temperature(CelsiusStrategy())
         }
 
+        // If is not default (celsius)
         if (temperatureUnit != 0) {
             for (key in weatherMap) {
                 if (key.value != null) {
@@ -80,6 +82,15 @@ class SettingsViewModel @Inject constructor(private val repository: Repository) 
         "Medium" -> CityType.MEDIUM
         "Big" -> CityType.BIG
         else -> CityType.UNKNOWN
+    }
+
+    fun getWeatherByCityId(cityId: Long): Weather? {
+        var response: Weather? = null
+        runBlocking {
+            response = repository.getWeatherByCity(cityId)
+            Log.i("Room", "got $response")
+        }
+        return response
     }
 
 }

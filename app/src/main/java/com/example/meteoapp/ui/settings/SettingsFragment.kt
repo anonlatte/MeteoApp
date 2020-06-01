@@ -1,50 +1,33 @@
 package com.example.meteoapp.ui.settings
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meteoapp.R
 import com.example.meteoapp.databinding.DialogCityAddingBinding
 import com.example.meteoapp.databinding.FragmentSettingsBinding
 import com.example.meteoapp.db.model.CityType
-import com.example.meteoapp.db.model.Month
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 
 class SettingsFragment : Fragment() {
 
-    private lateinit var monthsListAdapter: MonthsAdapter
-    private var temperatureUnit: Int = 0
     private lateinit var binding: FragmentSettingsBinding
+    private lateinit var dialogBinding: DialogCityAddingBinding
 
     @Inject
     lateinit var viewModel: SettingsViewModel
     private lateinit var adapter: SettingsCitiesAdapter
     private lateinit var sharedPreferences: SharedPreferences
-
-    companion object {
-        /**
-         * Regular expression for valid city name characters. Does not include any characters except EN and RU alphabet.
-         */
-        private const val PATTERN_CITY_NAME =
-            "^[A-Z][a-z]+(?:[\\s-][a-zA-Z]+)*$|^[А-Я][а-я]+(?:[\\s-][а-яА-Я]+)*$"
-    }
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -57,6 +40,13 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        dialogBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(requireContext()),
+            R.layout.dialog_city_adding,
+            null,
+            false
+        )
+
         viewModel.cityTypes = listOf(
             getString(CityType.SMALL.typeToResource()),
             getString(CityType.MEDIUM.typeToResource()),
@@ -75,14 +65,15 @@ class SettingsFragment : Fragment() {
                 null,
                 false
             )
-            showCityAddingDialog(dialogBinding)
+
+            CityAddingDialog(requireContext(), dialogBinding, viewModel).create().show()
         }
 
         return binding.root
     }
 
     private fun initializeTemperatureSettings() {
-        when (temperatureUnit) {
+        when (viewModel.temperatureUnit) {
             0 -> {
                 binding.temperatureUnits.check(R.id.celsiusButton)
             }
@@ -110,9 +101,9 @@ class SettingsFragment : Fragment() {
     private fun initializeSettings() {
         sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return
         val defaultValue = resources.getInteger(R.integer.saved_temperature_units_default_key)
-        temperatureUnit =
+        viewModel.temperatureUnit =
             sharedPreferences.getInt(getString(R.string.saved_temperature_unit), defaultValue)
-        Log.d("Settings", "temperature unit is $temperatureUnit.")
+        Log.d("Settings", "temperature unit is ${viewModel.temperatureUnit}.")
     }
 
     private fun changeTemperatureUnitsSettings(value: Int) {
@@ -121,104 +112,15 @@ class SettingsFragment : Fragment() {
             putInt(getString(R.string.saved_temperature_unit), value)
             commit()
         }
-        temperatureUnit = value
+        viewModel.temperatureUnit = value
         Log.d("Settings", "temperature units changed to $value.")
     }
 
     private fun initializeAdapter() {
-        adapter = SettingsCitiesAdapter()
+        adapter = SettingsCitiesAdapter(viewModel, binding)
         binding.settingsCitiesList.adapter = adapter
         binding.settingsCitiesList.layoutManager = LinearLayoutManager(requireContext())
     }
-
-    private fun showCityAddingDialog(dialogBinding: DialogCityAddingBinding) {
-        val dialog: AlertDialog =
-            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.title_dialog_add_city)
-                .setCancelable(true)
-                .setPositiveButton(
-                    getString(R.string.action_add)
-                ) { _, _ -> }
-                .setNegativeButton(getString(android.R.string.cancel)) { dialogInterface: DialogInterface, _: Int ->
-                    dialogInterface.cancel()
-                }.create()
-
-        initializeMonthsAdapter(dialogBinding)
-
-        dialog.setView(dialogBinding.root)
-        dialog.show()
-        val cityNameEditText = dialogBinding.name
-        val cityTypeSpinner = dialogBinding.type
-
-        // Overriding positive button for a validation of the fields.
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            when {
-                cityNameEditText.text.isNullOrEmpty() ->
-                    cityNameEditText.error = getString(R.string.warning_empty_city_field)
-
-                !cityNameEditText.text!!.matches(PATTERN_CITY_NAME.toRegex()) ->
-                    cityNameEditText.error = getString(R.string.warning_invalid_field)
-
-                cityTypeSpinner.selectedItem == "" -> {
-                    val errorText = (cityTypeSpinner.selectedView as TextView)
-                    errorText.error = ""
-                    errorText.setTextColor(Color.RED)
-                    errorText.text = getString(R.string.warning_empty_city_type_field)
-                }
-                else -> {
-                    val response = viewModel.addCity(
-                        cityNameEditText.text.toString(),
-                        cityTypeSpinner.selectedItem.toString()
-                    )
-                    if (response != null) {
-                        val preparedWeatherMap = mutableMapOf<Month, Double?>()
-                        monthsListAdapter.months.forEach { month ->
-                            if (month.temperature != null) {
-                                preparedWeatherMap[month] = month.temperature
-                            }
-                        }
-                        //TODO convert to default temperature units
-                        viewModel.addWeatherToCity(response, preparedWeatherMap, temperatureUnit)
-                    }
-
-                    val toastText =
-                        if (response != null) "${cityNameEditText.text} - has been added!" else getString(
-                            R.string.warning_unexpected_error
-                        )
-
-                    Toast.makeText(
-                        requireContext(),
-                        toastText,
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    dialog.cancel()
-                }
-            }
-        }
-    }
-
-    private fun initializeMonthsAdapter(dialogBinding: DialogCityAddingBinding) {
-
-        val monthsArray = arrayOf(
-            Month.JANUARY,
-            Month.FEBRUARY,
-            Month.MARCH,
-            Month.APRIL,
-            Month.MAY,
-            Month.JUNE,
-            Month.JULY,
-            Month.AUGUST,
-            Month.SEPTEMBER,
-            Month.OCTOBER,
-            Month.NOVEMBER,
-            Month.DECEMBER
-        )
-
-        monthsListAdapter = MonthsAdapter(monthsArray, temperatureUnit)
-        dialogBinding.monthsList.adapter = monthsListAdapter
-        dialogBinding.monthsList.layoutManager = GridLayoutManager(requireContext(), 3)
-    }
-
 
     private fun subscribeUI() {
         viewModel.cities.observe(viewLifecycleOwner, Observer { result ->
