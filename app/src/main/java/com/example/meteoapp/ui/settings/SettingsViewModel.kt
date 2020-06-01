@@ -40,6 +40,19 @@ class SettingsViewModel @Inject constructor(private val repository: Repository) 
         return responseHandler
     }
 
+    fun deleteCity(city: City): Int {
+        var responseHandler = 0
+        runBlocking {
+            try {
+                responseHandler = repository.deleteCity(city)
+                Log.i("Room", "$city has been deleted.")
+            } catch (e: Exception) {
+                Log.w("Room", e.message.toString())
+            }
+        }
+        return responseHandler
+    }
+
     fun addWeatherToCity(
         cityId: Long,
         weatherMap: MutableMap<Month, Double?>,

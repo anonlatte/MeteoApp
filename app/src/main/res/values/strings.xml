@@ -31,4 +31,7 @@
     <string name="units_temperature_kelvin">K</string>
     <string name="saved_temperature_unit">saved_temperature_unit</string>
     <string name="hint_city_name">City name</string>
+    <string name="action_remove_city">Remove</string>
+    <string name="message_remove_city">Remove this city?</string>
+    <string name="response_delete_city">City has been deleted!</string>
 </resources>
