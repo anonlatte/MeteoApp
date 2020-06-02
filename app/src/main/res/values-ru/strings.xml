@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MeteoApp</string>
+    <string name="weather_season_winter">Зима</string>
+    <string name="weather_season_spring">Весна</string>
+    <string name="weather_season_summer">Лето</string>
+    <string name="weather_season_autumn">Осень</string>
+    <string name="city_type_small">Маленький</string>
+    <string name="city_type_medium">Средний</string>
+    <string name="city_type_big">Большой</string>
+    <string name="city_type_unknown">Неизвестно</string>
+    <string name="title_settings">Настройки</string>
+    <string name="title_dialog_add_city">Добавить город</string>
+    <string name="action_add">Добавить</string>
+    <string name="warning_empty_city_field">Заполните поле</string>
+    <string name="warning_empty_city_type_field">Выберите тип</string>
+    <string name="warning_invalid_field">Неверное значение</string>
+    <string name="warning_unexpected_error">Упс, что-то пошло не так</string>
+    <string name="title_temperature_unit">Единицы измерения</string>
+    <string name="hint_city_name">Название</string>
+    <string name="action_remove_city">Удалить</string>
+    <string name="message_remove_city">Удалить город?</string>
+    <string name="response_delete_city">Город удален!</string>
+</resources>

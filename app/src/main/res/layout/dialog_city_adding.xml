@@ -44,7 +44,6 @@
             android:id="@+id/monthsList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:overScrollMode="never"
             android:scrollbars="vertical"
             tools:listitem="@layout/list_item_month" />
