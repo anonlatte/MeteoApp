@@ -129,7 +129,7 @@ class CityAddingDialog(
         listener: DialogInterface.OnClickListener?
     ): MaterialAlertDialogBuilder {
 
-        val positiveButtonClickListener = DialogInterface.OnClickListener { dialog, which ->
+        val positiveButtonClickListener = DialogInterface.OnClickListener { dialog, _ ->
             when {
                 cityNameEditText.text.isNullOrEmpty() ->
                     cityNameEditText.error = context.getString(R.string.warning_empty_city_field)
@@ -146,7 +146,7 @@ class CityAddingDialog(
                 else -> {
                     var cityResponse: Long? = null
 
-                    var toastText = ""
+                    val toastText: String
 
                     // If only weather data adding
                     if (city == null) {

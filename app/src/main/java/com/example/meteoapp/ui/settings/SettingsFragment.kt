@@ -85,7 +85,7 @@ class SettingsFragment : Fragment() {
             }
         }
 
-        binding.temperatureUnits.addOnButtonCheckedListener { group, checkedId, isChecked ->
+        binding.temperatureUnits.addOnButtonCheckedListener { group, _, isChecked ->
             if (isChecked) {
                 when (group.checkedButtonId) {
                     R.id.celsiusButton -> changeTemperatureUnitsSettings(0)
