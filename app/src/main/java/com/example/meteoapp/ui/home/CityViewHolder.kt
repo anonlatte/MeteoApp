@@ -24,28 +24,30 @@ class CityViewHolder(private var parent: ViewGroup) : RecyclerView.ViewHolder(
         this.city = city
         nameTextView.text = city?.name
         typeTextView.text = parent.context.getString(city?.type?.typeToResource()!!)
-        // TODO set temperature by settings of the temperature scales
 
-        textTemperatureUnit = when (temperatureUnit) {
-            1 -> {
-                itemViewContext.getString(
-                    R.string.parsed_units_temperature_fahrenheit,
-                    city.averageTemperatureBySeason.toString()
-                )
-            }
-            2 -> {
-                itemViewContext.getString(
-                    R.string.parsed_units_temperature_kelvin,
-                    city.averageTemperatureBySeason.toString()
-                )
-            }
-            else -> {
-                itemViewContext.getString(
-                    R.string.parsed_units_temperature_celsius,
-                    city.averageTemperatureBySeason.toString()
-                )
+        if (city.averageTemperatureBySeason != 0.0) {
+            textTemperatureUnit = when (temperatureUnit) {
+                1 -> {
+                    itemViewContext.getString(
+                        R.string.parsed_units_temperature_fahrenheit,
+                        city.averageTemperatureBySeason.toString()
+                    )
+                }
+                2 -> {
+                    itemViewContext.getString(
+                        R.string.parsed_units_temperature_kelvin,
+                        city.averageTemperatureBySeason.toString()
+                    )
+                }
+                else -> {
+                    itemViewContext.getString(
+                        R.string.parsed_units_temperature_celsius,
+                        city.averageTemperatureBySeason.toString()
+                    )
+                }
             }
         }
+
         temperatureTextView.text = textTemperatureUnit
 
         seasonTextView.text = when (city.selectedSeason) {

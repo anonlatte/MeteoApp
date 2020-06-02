@@ -40,7 +40,7 @@ class CitiesAdapter(private var viewModel: HomeViewModel) :
         val weather = viewModel.getWeatherByCityId(item.id)
         item.selectedSeason = viewModel.selectedSeason.value!!
         if (weather != null) {
-            item.averageTemperatureBySeason = convertTemperature(
+            item.averageTemperatureBySeason =
                 when (item.selectedSeason) {
                     Season.WINTER -> {
                         middleAverage(
@@ -73,8 +73,13 @@ class CitiesAdapter(private var viewModel: HomeViewModel) :
                         )
 
                     }
-                }, viewModel.temperatureUnits.value!!
-            ).round(2)
+                }
+            if (item.averageTemperatureBySeason != 0.0) {
+                item.averageTemperatureBySeason = convertTemperature(
+                    item.averageTemperatureBySeason,
+                    viewModel.temperatureUnits.value!!
+                ).round(2)
+            }
         }
 
         holder.bindTo(item, viewModel.temperatureUnits.value!!)
