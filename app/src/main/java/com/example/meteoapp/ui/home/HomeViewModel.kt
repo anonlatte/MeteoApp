@@ -1,10 +1,13 @@
 package com.example.meteoapp.ui.home
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.toLiveData
 import com.example.meteoapp.db.model.FavoriteCity
+import com.example.meteoapp.db.model.Season
+import com.example.meteoapp.db.model.Weather
 import com.example.meteoapp.repository.Repository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -13,6 +16,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private var repository: Repository) : ViewModel() {
     val cities = repository.getCities().toLiveData(50)
     val weather = repository.getAllWeatherRows().toLiveData(50)
+    val selectedSeason = MutableLiveData(Season.WINTER)
+    val temperatureUnits = MutableLiveData(0)
 
     fun addCityToFavorite(cityId: Long) = viewModelScope.launch {
         repository.addToFavorites(FavoriteCity(cityId = cityId))
@@ -34,4 +39,15 @@ class HomeViewModel @Inject constructor(private var repository: Repository) : Vi
         repository.removeFromFavorites(cityId)
         Log.i("Room", "City with id=$cityId has been removed from favorites")
     }
+
+    // FIXME DRY
+    fun getWeatherByCityId(cityId: Long): Weather? {
+        var response: Weather? = null
+        runBlocking {
+            response = repository.getWeatherByCity(cityId)
+            Log.i("Room", "got $response")
+        }
+        return response
+    }
+
 }

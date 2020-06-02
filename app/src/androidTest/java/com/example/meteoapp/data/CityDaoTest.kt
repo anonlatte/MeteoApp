@@ -1,3 +1,8 @@
+@file:Suppress(
+    "BlockingMethodInNonBlockingContext", "BlockingMethodInNonBlockingContext",
+    "BlockingMethodInNonBlockingContext"
+)
+
 package com.example.meteoapp.data
 
 import android.content.Context

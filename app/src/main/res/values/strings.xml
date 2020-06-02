@@ -17,7 +17,6 @@
     <string name="title_dialog_add_city">Add city</string>
 
     <string name="action_add">Add</string>
-    <string name="action_add_to_favorites">Add to favorites</string>
 
     <string name="warning_empty_city_field">Field must be filled</string>
     <string name="warning_empty_city_type_field">Select type</string>
@@ -25,7 +24,9 @@
     <string name="warning_unexpected_error">Whoops, something went wrong</string>
 
     <string name="title_temperature_unit">Temperature unit</string>
-    <string name="temperature">Temperature</string>
+    <string name="parsed_units_temperature_celsius">%1$s °C</string>
+    <string name="parsed_units_temperature_fahrenheit">%1$s °F</string>
+    <string name="parsed_units_temperature_kelvin">%1$s K</string>
     <string name="units_temperature_celsius">°C</string>
     <string name="units_temperature_fahrenheit">°F</string>
     <string name="units_temperature_kelvin">K</string>

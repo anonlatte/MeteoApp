@@ -15,6 +15,9 @@ data class City(
 ) {
     @Ignore
     var averageTemperatureBySeason: Double = 0.0
+
+    @Ignore
+    var selectedSeason: Season = Season.WINTER
 }
 
 enum class CityType(val type: Int) {

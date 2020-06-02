@@ -1,7 +1,9 @@
 package com.example.meteoapp.ui.home
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meteoapp.R
 import com.example.meteoapp.databinding.FragmentHomeBinding
+import com.example.meteoapp.db.model.Season
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 import kotlin.math.cos
@@ -22,10 +25,13 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var viewModel: HomeViewModel
     private lateinit var adapter: CitiesAdapter
+
     private var isFABMenuOpen = false
     private var fabMenuButtonSize: Float = 0F
     private var fabSubMenuButtonSize: Float = 0F
     private var fabMenuGutter: Float = 0F
+
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +41,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         initializeAdapter()
+        initializeSettings()
         subscribeUI()
         fabSubMenuButtonSize = resources.getDimension(R.dimen.fab_sub_menu_size)
         fabMenuButtonSize = resources.getDimension(R.dimen.fab_main_button_size)
@@ -45,6 +52,19 @@ class HomeFragment : Fragment() {
             } else {
                 showFABMenu()
             }
+        }
+
+        binding.winterButton.setOnClickListener {
+            viewModel.selectedSeason.value = Season.WINTER
+        }
+        binding.springButton.setOnClickListener {
+            viewModel.selectedSeason.value = Season.SPRING
+        }
+        binding.summerButton.setOnClickListener {
+            viewModel.selectedSeason.value = Season.SUMMER
+        }
+        binding.autumnButton.setOnClickListener {
+            viewModel.selectedSeason.value = Season.AUTUMN
         }
 
         return binding.root
@@ -83,6 +103,15 @@ class HomeFragment : Fragment() {
         binding.citiesList.layoutManager = LinearLayoutManager(requireContext())
     }
 
+    // FIXME DRY
+    private fun initializeSettings() {
+        sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE) ?: return
+        val defaultValue = resources.getInteger(R.integer.saved_temperature_units_default_key)
+        viewModel.temperatureUnits.value =
+            sharedPreferences.getInt(getString(R.string.saved_temperature_unit), defaultValue)
+        Log.d("Settings", "temperature unit is ${viewModel.temperatureUnits.value}.")
+    }
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -92,6 +121,10 @@ class HomeFragment : Fragment() {
         viewModel.cities.observe(viewLifecycleOwner, Observer { result ->
             binding.hasCities = !result.isNullOrEmpty()
             adapter.submitList(result)
+        })
+
+        viewModel.selectedSeason.observe(viewLifecycleOwner, Observer {
+            adapter.notifyDataSetChanged()
         })
     }
 }

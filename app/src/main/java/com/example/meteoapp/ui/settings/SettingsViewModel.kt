@@ -1,7 +1,6 @@
 package com.example.meteoapp.ui.settings
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.toLiveData
@@ -24,7 +23,6 @@ class SettingsViewModel @Inject constructor(private val repository: Repository) 
     val cities = repository.getCities().toLiveData(50)
     val weather = repository.getAllWeatherRows().toLiveData(50)
     lateinit var cityTypes: List<String>
-    val temperatureUnits = MutableLiveData<Double>()
 
     fun addCity(cityName: String, cityType: String): Long? {
         var responseHandler: Long? = null
@@ -97,6 +95,7 @@ class SettingsViewModel @Inject constructor(private val repository: Repository) 
         else -> CityType.UNKNOWN
     }
 
+    // FIXME DRY
     fun getWeatherByCityId(cityId: Long): Weather? {
         var response: Weather? = null
         runBlocking {
