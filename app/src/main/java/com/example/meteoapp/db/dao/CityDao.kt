@@ -11,7 +11,7 @@ interface CityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createCity(city: City): Long
 
-    @Query("SELECT * FROM city")
+    @Query("SELECT city.* FROM city LEFT JOIN favorite_city ON city.id=favorite_city.city_id GROUP BY city.id ORDER BY favorite_city.city_id DESC")
     fun getCities(): DataSource.Factory<Int, City>
 
     @Query("SELECT * FROM city WHERE id = :id")
